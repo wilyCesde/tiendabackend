@@ -10,9 +10,6 @@ const PORT   = process.env.PORT || 3000;
 const DB_URI = process.env.DB_URI;
 
 
-// CONEXIÓN A BASE DE DATOS
-//mongodb://localhost:27017/myapp'
-//mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.connect('mongodb://localhost:27017/dbShopping')
     .then(db => console.log("Conexión a BD correcta"))
     .catch(error => console.log("Error al conectarse a la BD" + error));
