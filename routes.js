@@ -44,6 +44,9 @@ router.delete ("/returnCars/:id",  cors(), controller.deleteReturnCar);  // Dele
 router.put    ("/returnCars/:id",  cors(), controller.updateReturnCar);  // Update
 router.post   ("/returnCars",      cors(), controller.createReturnCar);  // Create
 
+router.post("/login", cors(), controller.login);
+
+
 module.exports = router;
 
 module.exports = router;

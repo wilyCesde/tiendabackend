@@ -10,7 +10,7 @@ const PORT   = process.env.PORT || 3000;
 const DB_URI = process.env.DB_URI;
 
 
-mongoose.connect('mongodb://localhost:27017/dbShopping')
+mongoose.connect('mongodb://localhost:27017/renta-vehiculos')
     .then(db => console.log("Conexión a BD correcta"))
     .catch(error => console.log("Error al conectarse a la BD" + error));
 
