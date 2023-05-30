@@ -295,20 +295,7 @@ exports.login = async (req, res) => {
         res.status(500).json({ success: false, message: "Error en el servidor" });
     }
 
-    const registerCar = async (req, res) => {
-        try {
-          // Lógica para registrar un automóvil en la base de datos
-          // ...
-          
-          // Envía una respuesta de éxito si el registro es exitoso
-          res.json({ success: true, message: "Registro exitoso del automóvil" });
-        } catch (error) {
-          // Manejo de errores si ocurre algún problema durante el registro
-          res.status(500).json({ success: false, message: "Error al registrar el automóvil" });
-        }
-      };
-      
-      module.exports = { registerCar };
+   
       
 };
 

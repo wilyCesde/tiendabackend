@@ -45,7 +45,7 @@ router.put    ("/returnCars/:id",  cors(), controller.updateReturnCar);  // Upda
 router.post   ("/returnCars",      cors(), controller.createReturnCar);  // Create
 
 router.post("/login", cors(), controller.login);
-router.post("/registerCar", cors(), controller.registerCar);
+
 
 
 
