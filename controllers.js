@@ -1,6 +1,6 @@
 const { Cliente, Articulo, User, Car, Rent, ReturnCar } = require("./models.js");
 
-
+const mongoose = require("mongoose");
 // ------- CLIENTES
 
 exports.readClientes = (req, res) =>
@@ -211,19 +211,22 @@ exports.updateRent = (req, res) =>
     );
 
 
-exports.createRent = (req, res) =>
-    new Rent({
-        rentNumber: req.body.rentNumber,
-        username: req.body.username,
-        plateNumber: req.body.plateNumber,
-        initialDate: req.body.initialDate,
-        finalDate: req.body.finalDate,
-        status: req.body.status
-    })
-        .save((err, data) => {
-            if (err) res.json({ error: err });
-            else res.json(data);
+    exports.createRent = (req, res) => {
+        const rent = new Rent({
+          rentNumber: mongoose.Types.ObjectId(req.body.rentNumber),
+          username: req.body.username,
+          plateNumber: req.body.plateNumber,
+          initialDate: req.body.initialDate,
+          finalDate: req.body.finalDate,
+          status: req.body.status
         });
+      
+        rent.save((err, data) => {
+          if (err) res.json({ error: err });
+          else res.json(data);
+        });
+      };
+      
 // ------- RETURN CARS
 
 exports.readReturnCars = (req, res) =>
@@ -262,19 +265,30 @@ exports.updateReturnCar = (req, res) =>
             else res.json(data);
         }
     );
-
-
-exports.createReturnCar = (req, res) =>
-    new ReturnCar({
-        returnNumber: req.body.returnNumber,
-        rentNumber: req.body.rentNumber,
-        returnDate: req.body.returnDate
-    })
-        .save((err, data) => {
-            if (err) res.json({ error: err });
-            else res.json(data);
+    exports.createReturnCar = (req, res) => {
+        const { returnNumber, rentNumber, returnDate } = req.body;
+      
+        let rentObjectId = rentNumber; // Mantener el valor inicial
+      
+        // Verificar si rentNumber es una cadena antes de convertirlo en ObjectId
+        if (typeof rentNumber === 'string') {
+          rentObjectId = mongoose.Types.ObjectId(rentNumber);
+        }
+      
+        new ReturnCar({
+          returnNumber: returnNumber,
+          rentNumber: rentObjectId,
+          returnDate: returnDate
+        }).save((err, data) => {
+          if (err) res.json({ error: err });
+          else res.json(data);
         });
-
+      };
+      
+      
+      
+      
+      
 // login
 exports.login = async (req, res) => {
     const { username, password } = req.body;
@@ -295,7 +309,7 @@ exports.login = async (req, res) => {
         res.status(500).json({ success: false, message: "Error en el servidor" });
     }
 
-   
-      
+
+
 };
 

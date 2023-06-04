@@ -46,8 +46,7 @@ router.post   ("/returnCars",      cors(), controller.createReturnCar);  // Crea
 
 router.post("/login", cors(), controller.login);
 
-
-
+router.post('/createReturnCar', cors(), controller.createReturnCar);
 
 module.exports = router;
 
