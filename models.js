@@ -29,9 +29,10 @@ const Rent = mongoose.model('Rent',
 
 const ReturnCar = mongoose.model('ReturnCar',
   new mongoose.Schema({
-    returnNumber: String,
-    rentNumber: { type: mongoose.Schema.Types.ObjectId, ref: 'Rent' },
-    returnDate: Date,
+    rentNumber: Number,
+    plateNumber: String,
+    username: String,
+    returnDate: { type: Date, default: new Date() },
   })
 );
 

@@ -1,52 +1,50 @@
-const cors       = require('cors')
-const express    = require("express");
+const cors = require('cors');
+const express = require("express");
 const controller = require("./controllers.js");
-
 
 const router = express.Router();
 
-
 // --------------- API REST CRUD
 
-router.get    ("/clientes",      cors(), controller.readClientes);   // Read All
-router.get    ("/clientes/:id",  cors(), controller.readCliente);    // Read
-router.delete ("/clientes/:id",  cors(), controller.deleteCliente);  // Delete
-router.put    ("/clientes/:id",  cors(), controller.updateCliente);  // Update
-router.post   ("/clientes",      cors(), controller.createCliente);  // Create
+router.get("/clientes", cors(), controller.readClientes);
+router.get("/clientes/:id", cors(), controller.readCliente);
+router.delete("/clientes/:id", cors(), controller.deleteCliente);
+router.put("/clientes/:id", cors(), controller.updateCliente);
+router.post("/clientes", cors(), controller.createCliente);
 
-router.get    ("/articulos",     cors(), controller.readArticulos);  // Read All
-router.get    ("/articulos/:id", cors(), controller.readArticulo);   // Read
-router.delete ("/articulos/:id", cors(), controller.deleteArticulo); // Delete
-router.put    ("/articulos/:id", cors(), controller.updateArticulo); // Update
-router.post   ("/articulos",     cors(), controller.createArticulo); // Create
+router.get("/articulos", cors(), controller.readArticulos);
+router.get("/articulos/:id", cors(), controller.readArticulo);
+router.delete("/articulos/:id", cors(), controller.deleteArticulo);
+router.put("/articulos/:id", cors(), controller.updateArticulo);
+router.post("/articulos", cors(), controller.createArticulo);
 
-router.get    ("/users",      cors(), controller.readUsers);   // Read All
-router.get    ("/users/:id",  cors(), controller.readUser);    // Read
-router.delete ("/users/:id",  cors(), controller.deleteUser);  // Delete
-router.put    ("/users/:id",  cors(), controller.updateUser);  // Update
-router.post   ("/users",      cors(), controller.createUser);  // Create
+router.get("/users", cors(), controller.readUsers);
+router.get("/users/:id", cors(), controller.readUser);
+router.delete("/users/:id", cors(), controller.deleteUser);
+router.put("/users/:id", cors(), controller.updateUser);
+router.post("/users", cors(), controller.createUser);
 
-router.get    ("/cars",      cors(), controller.readCars);   // Read All
-router.get    ("/cars/:id",  cors(), controller.readCar);    // Read
-router.delete ("/cars/:id",  cors(), controller.deleteCar);  // Delete
-router.put    ("/cars/:id",  cors(), controller.updateCar);  // Update
-router.post   ("/cars",      cors(), controller.createCar);  // Create
+router.get("/cars", cors(), controller.readCars);
+router.get("/cars/:id", cors(), controller.readCar);
+router.delete("/cars/:id", cors(), controller.deleteCar);
+// router.put("/cars/:id", cors(), controller.updateCar); 
+router.post("/cars", cors(), controller.createCar);
 
-router.get    ("/rents",      cors(), controller.readRents);   // Read All
-router.get    ("/rents/:id",  cors(), controller.readRent);    // Read
-router.delete ("/rents/:id",  cors(), controller.deleteRent);  // Delete
-router.put    ("/rents/:id",  cors(), controller.updateRent);  // Update
-router.post   ("/rents",      cors(), controller.createRent);  // Create
+router.get("/rents", cors(), controller.readRents);
+router.get("/rents/:id", cors(), controller.readRent);
+router.delete("/rents/:id", cors(), controller.deleteRent);
+router.put("/rents/:id", cors(), controller.updateRent);
+router.post("/rents", cors(), controller.createRent);
 
-router.get    ("/returnCars",      cors(), controller.readReturnCars);   // Read All
-router.get    ("/returnCars/:id",  cors(), controller.readReturnCar);    // Read
-router.delete ("/returnCars/:id",  cors(), controller.deleteReturnCar);  // Delete
-router.put    ("/returnCars/:id",  cors(), controller.updateReturnCar);  // Update
-router.post   ("/returnCars",      cors(), controller.createReturnCar);  // Create
+// routes.js
+
+router.put("/returnCars/:id", cors(), controller.updateReturnCar);
+router.get("/returnCars/:id", cors(), controller.readReturnCar);
+router.delete("/returnCars/:id", cors(), controller.deleteReturnCar);
+router.get("/returnCars", cors(), controller.readReturnCars);
+router.put("/updateReturnCar/:id", cors(), controller.updateReturnCar);
 
 router.post("/login", cors(), controller.login);
 
-router.post('/createReturnCar', cors(), controller.createReturnCar);
 
 module.exports = router;
-

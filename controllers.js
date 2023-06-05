@@ -150,15 +150,6 @@ exports.deleteCar = (req, res) =>
     });
 
 
-exports.updateCar = (req, res) =>
-    Car.findOneAndUpdate(
-        { _id: req.params.id },
-        { $set: { plateNumber: req.body.plateNumber, brand: req.body.brand, state: req.body.state, dailyValue: req.body.dailyValue } },
-        (err, data) => {
-            if (err) res.json({ error: err });
-            else res.json(data);
-        }
-    );
 
 
 exports.createCar = (req, res) =>
@@ -211,22 +202,22 @@ exports.updateRent = (req, res) =>
     );
 
 
-    exports.createRent = (req, res) => {
-        const rent = new Rent({
-          rentNumber: mongoose.Types.ObjectId(req.body.rentNumber),
-          username: req.body.username,
-          plateNumber: req.body.plateNumber,
-          initialDate: req.body.initialDate,
-          finalDate: req.body.finalDate,
-          status: req.body.status
-        });
-      
-        rent.save((err, data) => {
-          if (err) res.json({ error: err });
-          else res.json(data);
-        });
-      };
-      
+exports.createRent = (req, res) => {
+    const rent = new Rent({
+        rentNumber: mongoose.Types.ObjectId(req.body.rentNumber),
+        username: req.body.username,
+        plateNumber: req.body.plateNumber,
+        initialDate: req.body.initialDate,
+        finalDate: req.body.finalDate,
+        status: req.body.status
+    });
+
+    rent.save((err, data) => {
+        if (err) res.json({ error: err });
+        else res.json(data);
+    });
+};
+
 // ------- RETURN CARS
 
 exports.readReturnCars = (req, res) =>
@@ -250,45 +241,75 @@ exports.deleteReturnCar = (req, res) =>
     });
 
 
-exports.updateReturnCar = (req, res) =>
-    ReturnCar.findOneAndUpdate(
-        { _id: req.params.id },
-        {
-            $set: {
-                returnNumber: req.body.returnNumber,
-                rentNumber: req.body.rentNumber,
-                returnDate: req.body.returnDate
+exports.updateReturnCar = (req, res) => {
+    const carId = req.params.id;
+
+    Car.findOne({ _id: carId }, (err, car) => {
+        if (err) {
+            res.json({ error: err });
+        } else {
+            if (car.state === 'alquilado') {
+                Car.findOneAndUpdate(
+                    { _id: carId },
+                    { $set: { state: 'disponible' } },
+                    { new: true },
+                    (err, updatedCar) => {
+                        if (err) {
+                            res.json({ error: err });
+                        } else {
+                            // Crear el registro de retorno del vehículo
+                            const returnCarData = {
+                                returnNumber: req.body.returnNumber,
+                                rentNumber: req.body.rentNumber,
+                                returnDate: req.body.returnDate,
+                            };
+
+                            new ReturnCar(returnCarData).save((err, returnCar) => {
+                                if (err) {
+                                    res.json({ error: err });
+                                } else {
+                                    res.json(updatedCar);
+                                }
+                            });
+                        }
+                    }
+                );
+            } else {
+                res.json({ message: 'El vehículo no está alquilado' });
             }
-        },
-        (err, data) => {
-            if (err) res.json({ error: err });
-            else res.json(data);
         }
-    );
-    exports.createReturnCar = (req, res) => {
-        const { returnNumber, rentNumber, returnDate } = req.body;
-      
-        let rentObjectId = rentNumber; // Mantener el valor inicial
-      
-        // Verificar si rentNumber es una cadena antes de convertirlo en ObjectId
-        if (typeof rentNumber === 'string') {
-          rentObjectId = mongoose.Types.ObjectId(rentNumber);
+    });
+};
+
+exports.createReturnCar = (req, res) => {
+    const { returnNumber, rentNumber, returnDate } = req.body;
+
+    let rentObjectId = rentNumber; // Mantener el valor inicial
+
+    // Verificar si rentNumber es una cadena antes de convertirlo en ObjectId
+    if (typeof rentNumber === 'string') {
+        try {
+            rentObjectId = mongoose.Types.ObjectId(rentNumber);
+        } catch (error) {
+            return res.json({ error: "El formato de rentNumber es incorrecto" });
         }
-      
-        new ReturnCar({
-          returnNumber: returnNumber,
-          rentNumber: rentObjectId,
-          returnDate: returnDate
-        }).save((err, data) => {
-          if (err) res.json({ error: err });
-          else res.json(data);
-        });
-      };
-      
-      
-      
-      
-      
+    }
+
+    new ReturnCar({
+        returnNumber: returnNumber,
+        rentNumber: rentObjectId,
+        returnDate: returnDate
+    }).save((err, data) => {
+        if (err) res.json({ error: err });
+        else res.json(data);
+    });
+};
+
+
+
+
+
+
 // login
 exports.login = async (req, res) => {
     const { username, password } = req.body;
