@@ -27,7 +27,7 @@ router.post("/users", cors(), controller.createUser);
 router.get("/cars", cors(), controller.readCars);
 router.get("/cars/:id", cors(), controller.readCar);
 router.delete("/cars/:id", cors(), controller.deleteCar);
-// router.put("/cars/:id", cors(), controller.updateCar); 
+
 router.post("/cars", cors(), controller.createCar);
 
 router.get("/rents", cors(), controller.readRents);
@@ -36,15 +36,14 @@ router.delete("/rents/:id", cors(), controller.deleteRent);
 router.put("/rents/:id", cors(), controller.updateRent);
 router.post("/rents", cors(), controller.createRent);
 
-// routes.js
-
-router.put("/returnCars/:id", cors(), controller.updateReturnCar);
 router.get("/returnCars/:id", cors(), controller.readReturnCar);
 router.delete("/returnCars/:id", cors(), controller.deleteReturnCar);
 router.get("/returnCars", cors(), controller.readReturnCars);
-router.put("/updateReturnCar/:id", cors(), controller.updateReturnCar);
+router.post("/returnCars/:id", cors(), controller.createReturnCar);
+
+
+
 
 router.post("/login", cors(), controller.login);
-
 
 module.exports = router;

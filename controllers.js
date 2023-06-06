@@ -241,46 +241,55 @@ exports.deleteReturnCar = (req, res) =>
     });
 
 
-exports.updateReturnCar = (req, res) => {
-    const carId = req.params.id;
-
-    Car.findOne({ _id: carId }, (err, car) => {
-        if (err) {
+    exports.updateReturnCar = (req, res) => {
+        const carId = req.params.id;
+      
+        Car.findById(carId, (err, car) => {
+          if (err) {
             res.json({ error: err });
-        } else {
+          } else {
             if (car.state === 'alquilado') {
-                Car.findOneAndUpdate(
-                    { _id: carId },
-                    { $set: { state: 'disponible' } },
-                    { new: true },
-                    (err, updatedCar) => {
-                        if (err) {
-                            res.json({ error: err });
-                        } else {
-                            // Crear el registro de retorno del vehículo
-                            const returnCarData = {
-                                returnNumber: req.body.returnNumber,
-                                rentNumber: req.body.rentNumber,
-                                returnDate: req.body.returnDate,
-                            };
-
-                            new ReturnCar(returnCarData).save((err, returnCar) => {
-                                if (err) {
-                                    res.json({ error: err });
-                                } else {
-                                    res.json(updatedCar);
-                                }
-                            });
-                        }
-                    }
-                );
+              Car.findByIdAndUpdate(
+                carId,
+                { $set: { state: 'disponible' } },
+                { new: true },
+                (err, updatedCar) => {
+                  if (err) {
+                    res.json({ error: err });
+                  } else {
+                    // Crear el registro de retorno del vehículo
+                    const returnCarData = {
+                      returnNumber: req.body.returnNumber,
+                      rentNumber: req.body.rentNumber,
+                      returnDate: new Date(), // Utiliza la fecha actual del servidor
+                    };
+      
+                    new ReturnCar(returnCarData).save((err, returnCar) => {
+                      if (err) {
+                        res.json({ error: err });
+                      } else {
+                        // Guardar los cambios en la base de datos
+                        Promise.all([
+                          updatedCar.save(),
+                          returnCar.save()
+                        ]).then(() => {
+                          res.json(updatedCar);
+                        }).catch((err) => {
+                          res.json({ error: err });
+                        });
+                      }
+                    });
+                  }
+                }
+              );
             } else {
-                res.json({ message: 'El vehículo no está alquilado' });
+              res.json({ message: 'El vehículo no está alquilado' });
             }
-        }
-    });
-};
-
+          }
+        });
+      };
+      
+    
 exports.createReturnCar = (req, res) => {
     const { returnNumber, rentNumber, returnDate } = req.body;
 
